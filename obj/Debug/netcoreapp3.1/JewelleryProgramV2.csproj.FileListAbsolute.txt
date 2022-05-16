@@ -1,0 +1,14 @@
+C:\Users\jake_\Google Drive\Projects\JewelleryProgramV2\bin\Debug\netcoreapp3.1\JewelleryProgramV2.exe
+C:\Users\jake_\Google Drive\Projects\JewelleryProgramV2\bin\Debug\netcoreapp3.1\JewelleryProgramV2.deps.json
+C:\Users\jake_\Google Drive\Projects\JewelleryProgramV2\bin\Debug\netcoreapp3.1\JewelleryProgramV2.runtimeconfig.json
+C:\Users\jake_\Google Drive\Projects\JewelleryProgramV2\bin\Debug\netcoreapp3.1\JewelleryProgramV2.runtimeconfig.dev.json
+C:\Users\jake_\Google Drive\Projects\JewelleryProgramV2\bin\Debug\netcoreapp3.1\JewelleryProgramV2.dll
+C:\Users\jake_\Google Drive\Projects\JewelleryProgramV2\bin\Debug\netcoreapp3.1\JewelleryProgramV2.pdb
+C:\Users\jake_\Google Drive\Projects\JewelleryProgramV2\obj\Debug\netcoreapp3.1\JewelleryProgramV2.csproj.AssemblyReference.cache
+C:\Users\jake_\Google Drive\Projects\JewelleryProgramV2\obj\Debug\netcoreapp3.1\JewelleryProgramV2.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\jake_\Google Drive\Projects\JewelleryProgramV2\obj\Debug\netcoreapp3.1\JewelleryProgramV2.AssemblyInfoInputs.cache
+C:\Users\jake_\Google Drive\Projects\JewelleryProgramV2\obj\Debug\netcoreapp3.1\JewelleryProgramV2.AssemblyInfo.cs
+C:\Users\jake_\Google Drive\Projects\JewelleryProgramV2\obj\Debug\netcoreapp3.1\JewelleryProgramV2.csproj.CoreCompileInputs.cache
+C:\Users\jake_\Google Drive\Projects\JewelleryProgramV2\obj\Debug\netcoreapp3.1\JewelleryProgramV2.dll
+C:\Users\jake_\Google Drive\Projects\JewelleryProgramV2\obj\Debug\netcoreapp3.1\JewelleryProgramV2.pdb
+C:\Users\jake_\Google Drive\Projects\JewelleryProgramV2\obj\Debug\netcoreapp3.1\JewelleryProgramV2.genruntimeconfig.cache
