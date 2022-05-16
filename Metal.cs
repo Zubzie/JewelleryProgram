@@ -7,8 +7,8 @@ namespace JewelleryProgramV2
     class Metal
     {
         // Instance Variables
-        private string Name { get; set; }
-        private double SpecificGravity { get; set; }
+        private string Name;
+        private double SpecificGravity;
 
         // Constructor
         public Metal(string name, double specificGravity)
@@ -26,6 +26,23 @@ namespace JewelleryProgramV2
         public double GetSG()
         {
             return this.SpecificGravity;
+        }
+
+        public void SetName(string name)
+        {
+            this.Name = name;
+        }
+
+        public void SetSG(double specificGravity)
+        {
+            this.SpecificGravity = specificGravity;
+        }
+
+        public double ConvertMetal(Metal oldMetal, Metal newMetal, double weight)
+        {
+            double result = weight * (1.0 / oldMetal.SpecificGravity);
+            result *= newMetal.SpecificGravity;
+            return result;            
         }
     }
 }

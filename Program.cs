@@ -8,7 +8,16 @@ namespace JewelleryProgramV2
         enum MenuOption
         {
             MetalConverter = 1,
-            Quit = 2
+            MetalSettings = 2,
+            Quit = 3
+        };
+
+        enum SettingsMenu
+        {
+            CheckMetals = 1,
+            AddMetal = 2,
+            RemoveMetal = 3,
+            Back = 4
         };
 
         static void Main(string[] args)
@@ -46,7 +55,7 @@ namespace JewelleryProgramV2
             Metal wax = new Metal("Wax", 1.0);
             metalList.Add(wax);
 
-            // Reads and checks user input
+            // Reads and checks user input for Main Menu
             static MenuOption ReadUserOption()
             {
                 int option = 0;
@@ -68,76 +77,232 @@ namespace JewelleryProgramV2
                 return (MenuOption)option;
             }
 
-            // Checks for metal
+            // Prints Main Menu
+            static void printMainMenu()
+            {
+                Console.WriteLine("-- MAIN MENU --");
+                Console.WriteLine("{0}. Metal Calculator", Convert.ToInt32(MenuOption.MetalConverter));
+                Console.WriteLine("{0}. Metal Settings", Convert.ToInt32(MenuOption.MetalSettings));
+                Console.WriteLine("{0}. Quit", Convert.ToInt32(MenuOption.Quit));
+            }
+
+            // Reads and checks user input for Settings Menu
+            static SettingsMenu ReadSettingsMenu()
+            {
+                int option = 0;
+                do
+                {
+                    try
+                    {
+                        option = Convert.ToInt32(Console.ReadLine());
+                        if (option! < 1 || option! > Convert.ToInt32(SettingsMenu.Back))
+                        {
+                            Console.WriteLine("Must be a number between 1 and {0}. Please try again.", Convert.ToInt32(SettingsMenu.Back));
+                        }
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Error. Must be a number.");
+                    }
+                } while (option! < 1 && option! > Convert.ToInt32(SettingsMenu.Back));
+                return (SettingsMenu)option;
+            }                   
+            
+            // Prints Metal Settings Menu
+            static void printMetalSettings()
+            {
+                Console.WriteLine("-- METAL SETTINGS --");
+                Console.WriteLine("{0}. Check Metals", Convert.ToInt32(SettingsMenu.CheckMetals));
+                Console.WriteLine("{0}. Add Metal", Convert.ToInt32(SettingsMenu.AddMetal));
+                Console.WriteLine("{0}. Remove Metal", Convert.ToInt32(SettingsMenu.RemoveMetal));
+                Console.WriteLine("{0}. Back to Main Menu", Convert.ToInt32(SettingsMenu.Back));
+            }
+
+            // Checks for metal name in metalList
             static bool CheckMetal(string metal, List<Metal> metalList)
             {
                 for (int i = 0; i < metalList.Count; i++)
                 {
-                    if (metalList[i].GetName() == metal)
+                    if (metalList[i].GetName().ToLower() == metal)
                     {
                         return true;
                     }
                 }
                 return false;
             }
-            
-            // Prints Main Menu
-            static void printMainMenu()
+
+            // Gets metal from metalList
+            static Metal GetMetal(string metal, List<Metal> metalList)
             {
-                Console.WriteLine("-- MAIN MENU --");
-                Console.WriteLine("{0}. Metal Calculator", Convert.ToInt32(MenuOption.MetalConverter));
-                Console.WriteLine("{0}. Quit", Convert.ToInt32(MenuOption.Quit));
+                for (int i = 0; i < metalList.Count; i++)
+                {
+                    if (metalList[i].GetName().ToLower() == metal)
+                    {
+                        return metalList[i];
+                    }
+                }
+                return null;
             }
-            
-            // Converts metals
-            static void metalConverter(List<Metal> metalList)
+
+            // Prints out metals
+            static void PrintMetals(List<Metal> metalList)
             {
-                string metal1 = "";
-                string metal2 = "";
-                double weight = 0.0;
-
-                Console.WriteLine("What is the original metal?");
-                do
+                Console.WriteLine("\nMetal List:");
+                foreach (Metal metal in metalList)
                 {
-                    metal1 = Console.ReadLine().ToString();
-                } while (CheckMetal(metal1, metalList)! == true);
+                    Console.WriteLine(metal.GetName());
+                }
+            }
 
-                Console.WriteLine("What is the new metal?");
-                do
-                {
-                    metal2 = Console.ReadLine().ToString();
-                } while (CheckMetal(metal2, metalList)! == true);
+            // Prints details of metals
+            static void PrintMetalDetails(List<Metal> metalList)
+            {
+                Console.Clear();
+                Console.Write("{0}", "-- Metal List --");
+                Console.SetCursorPosition(30, 0);
+                Console.WriteLine("{0}", "-- Specific Gravity --");
+                for (int i = 0; i < metalList.Count; i++)
+                {                   
+                    Console.Write("{0}. {1}", (i+1), metalList[i].GetName());
+                    Console.SetCursorPosition(38, (i + 1));
+                    Console.WriteLine("{0}", metalList[i].GetSG());
+                }
 
-                Console.WriteLine("What is the weight?");
+                Console.WriteLine("\nPress any key to continue."); 
+                Console.ReadKey();
+            }
+
+            // Adds a new metal
+            static List<Metal> AddMetal(List<Metal> metalList)
+            {
+                Console.Clear();
+                Console.WriteLine("-- Add Metal --");
+                Console.WriteLine("\nWhat is the name of the new metal?");
+                string metal = Console.ReadLine().ToString();
+                metal = char.ToUpper(metal[0]) + metal[1..];
+                double sg = 0.0;
+                
                 do
                 {
                     try
                     {
+                        Console.WriteLine("\nWhat is the specific gravity of the new metal?");
+                        sg = Convert.ToDouble(Console.ReadLine());
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Error. Must be a number.");
+                    }
+                } while (sg <= 0.0);
+
+                Metal newMetal = new Metal(metal, sg);
+                metalList.Add(newMetal);
+                return metalList;
+            }
+
+            // Remove a metal
+            static List<Metal> RemoveMetal(List<Metal> metalList)
+            {
+                Console.Clear();
+                Console.WriteLine("-- Remove Metal --");
+
+                PrintMetals(metalList);
+                Console.WriteLine("\nWhat is the name of the metal to remove?");
+                string metal = Console.ReadLine().ToString().ToLower();
+
+                for (int i = 0; i < metalList.Count; i++)
+                {
+                    if (metalList[i].GetName().ToLower() == metal)
+                    {
+                        metalList.RemoveAt(i);
+                    }
+                }               
+
+                return metalList;
+            }
+
+            // Converts metal to another metal
+            static void metalConverter(List<Metal> metalList)
+            {              
+                Metal dummyMetal = new Metal("", 0.0);
+                string oldMetal;
+                string newMetal;
+                double weight = 0.0;
+
+                Console.Clear();
+                Console.WriteLine("-- Metal Converter --");
+                PrintMetals(metalList);
+                
+                do
+                {
+                    Console.WriteLine("\nWhat is the original metal?");
+                    oldMetal = Console.ReadLine().ToString();
+                } while (CheckMetal(oldMetal.ToLower(), metalList) == false);
+
+                do
+                {
+                    Console.WriteLine("\nWhat is the new metal?");
+                    newMetal = Console.ReadLine().ToString();
+                } while (CheckMetal(newMetal.ToLower(), metalList) == false);
+               
+                do
+                {
+                    try
+                    {
+                        Console.WriteLine("\nWhat is the weight? (grams)");
                         weight = Convert.ToDouble(Console.ReadLine());
                     }
                     catch
                     {
                         Console.WriteLine("Error. Must be a number.");
                     }                   
-                } while (weight! == );
+                } while (weight <= 0.0);
 
+                weight = dummyMetal.ConvertMetal(GetMetal(oldMetal.ToLower(), metalList), GetMetal(newMetal.ToLower(), metalList), weight);
+                Console.WriteLine("\nNew metal weight is: {0}g", weight);
+
+                Console.WriteLine("\nPress any key to continue.");
+                Console.ReadKey();
+            }
+
+            // Metal Settings Menu
+            static void MetalSettingsMenu(List<Metal> metalList)
+            {
+                SettingsMenu option;
+                do
+                {
+                    Console.Clear();
+                    printMetalSettings();
+                    Console.WriteLine("\nWhat would you like to do?");
+                    option = ReadSettingsMenu();
+
+                    switch (option)
+                    {
+                        case SettingsMenu.CheckMetals: PrintMetalDetails(metalList); break;
+                        case SettingsMenu.AddMetal: metalList = AddMetal(metalList); break;
+                        case SettingsMenu.RemoveMetal: metalList = RemoveMetal(metalList); break;
+                        case SettingsMenu.Back: break;
+                    }
+                    Console.WriteLine();
+                } while (option != SettingsMenu.Back);
             }
 
             // Main Menu
             MenuOption option;
             do
             {
+                Console.Clear();
                 printMainMenu();
-                Console.WriteLine();
-                Console.WriteLine("What would you like to do?");
+                Console.WriteLine("\nWhat would you like to do?");
                 option = ReadUserOption();
 
                 switch (option)
                 {
                     case MenuOption.MetalConverter: metalConverter(metalList); break;
+                    case MenuOption.MetalSettings: MetalSettingsMenu(metalList); break;
                     case MenuOption.Quit: break;
                 }
-                Console.WriteLine("");
+                Console.WriteLine();
             } while (option != MenuOption.Quit);
         }
     }
