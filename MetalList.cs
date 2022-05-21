@@ -18,6 +18,11 @@ namespace JewelleryProgramV2
         }
 
         // Methods
+        public List<Metal> GetMetalList()
+        {
+            return this.List;
+        }
+
         // Adds all default metals
         public void AddDefaultMetals()
         {
@@ -82,7 +87,6 @@ namespace JewelleryProgramV2
         // Prints out metals
         public void PrintMetals()
         {
-            Console.WriteLine("-- Metal List --");
             foreach (Metal metal in this.List)
             {
                 Console.WriteLine(metal.GetName());
@@ -224,6 +228,20 @@ namespace JewelleryProgramV2
                     }
                 }
                 return List;
+            }
+        }
+
+        // Restores all metals to default values
+        public void ResetDefaultValues()
+        {
+            Console.WriteLine("Would you like to reset metals to default? Y/N");
+            string answer = Console.ReadLine().ToLower();
+
+            if (answer == "y")
+            {
+                List<Metal> metalList = new List<Metal>();
+                List = metalList;
+                AddDefaultMetals();
             }
         }
     }

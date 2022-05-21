@@ -8,9 +8,12 @@ namespace JewelleryProgramV2
         enum MenuOption
         {
             MetalConverter = 1,
-            MetalSettings = 2,
-            RingSizeSettings = 3,
-            Quit = 4
+            RingWeight = 2,
+            RingResizer = 3,
+            PrintHistory = 4,
+            MetalSettings = 5,
+            RingSizeSettings = 6,
+            Quit = 7
         };
 
         enum SettingsMenu
@@ -19,7 +22,8 @@ namespace JewelleryProgramV2
             Add = 2,
             Remove = 3,
             Modify = 4,
-            Back = 5
+            ResetDefault = 5,
+            Back = 6
         };
 
         static void Main(string[] args)
@@ -27,6 +31,7 @@ namespace JewelleryProgramV2
             // Create new lists
             MetalList metalList = new MetalList();
             RingSizeList ringSizeList = new RingSizeList();
+            Calculations calculations = new Calculations(metalList, ringSizeList);
 
             // Reads and checks user input for Main Menu
             static MenuOption ReadUserOption()
@@ -77,6 +82,9 @@ namespace JewelleryProgramV2
             {
                 Console.WriteLine("-- MAIN MENU --");
                 Console.WriteLine("{0}. Metal Calculator", Convert.ToInt32(MenuOption.MetalConverter));
+                Console.WriteLine("{0}. Calculate Ring Weight", Convert.ToInt32(MenuOption.RingWeight));
+                Console.WriteLine("{0}. Ring Resizer", Convert.ToInt32(MenuOption.RingResizer));
+                Console.WriteLine("{0}. Print Calculation History", Convert.ToInt32(MenuOption.PrintHistory));
                 Console.WriteLine("{0}. Metal Settings", Convert.ToInt32(MenuOption.MetalSettings));
                 Console.WriteLine("{0}. Ring Size Settings", Convert.ToInt32(MenuOption.RingSizeSettings));
                 Console.WriteLine("{0}. Quit", Convert.ToInt32(MenuOption.Quit));
@@ -90,49 +98,51 @@ namespace JewelleryProgramV2
                 Console.WriteLine("{0}. Add {1}", Convert.ToInt32(SettingsMenu.Add), keyword);
                 Console.WriteLine("{0}. Remove {1}", Convert.ToInt32(SettingsMenu.Remove), keyword);
                 Console.WriteLine("{0}. Modify {1}", Convert.ToInt32(SettingsMenu.Modify), keyword);
+                Console.WriteLine("{0}. Reset to Default", Convert.ToInt32(SettingsMenu.ResetDefault), keyword);
                 Console.WriteLine("{0}. Back to Main Menu", Convert.ToInt32(SettingsMenu.Back));
-            }             
+            }
 
-            // Converts metal to another metal
-            static void MetalConverter(MetalList metalList)
-            {              
-                Metal dummyMetal = new Metal("", 0.0);
-                string oldMetal;
-                string newMetal;
-                double weight = 0.0;
+            // Executes Ring Resizer
+            static void DoRingResizer(Calculations calculations)
+            {
+                Console.Clear();
+                Console.WriteLine("-- Ring Resizer --");
 
+                double weight = calculations.RingResizer();
+                History history = new History("Ring Resize", weight);
+                calculations.AddToCalculationHisory(history);
+
+                Console.WriteLine("\nDifference between rings is: {0}g", weight);
+                Console.WriteLine("\nPress any key to continue.");
+                Console.ReadKey();
+                
+            }
+
+            // Executes and calculates ring weight
+            static void DoRingWeight(Calculations calculations)
+            {
+                Console.Clear();
+                Console.WriteLine("-- Calculate Ring Weight --");
+
+                (double weight, double width, double thickness, double metalSG) = calculations.RingWeight();
+                History history = new History("Ring Weight", weight);
+                calculations.AddToCalculationHisory(history);
+
+                Console.WriteLine("\nThe weight of the ring is: {0}g", weight);
+                Console.WriteLine("\nPress any key to continue.");
+                Console.ReadKey();
+            }
+
+            static void DoMetalConversion(Calculations calculations)
+            {
                 Console.Clear();
                 Console.WriteLine("-- Metal Converter --");
-                metalList.PrintMetals();
-                
-                do
-                {
-                    Console.WriteLine("\nWhat is the original metal?");
-                    oldMetal = Console.ReadLine().ToString();
-                } while (metalList.CheckMetal(oldMetal.ToLower()) == false);
 
-                do
-                {
-                    Console.WriteLine("\nWhat is the new metal?");
-                    newMetal = Console.ReadLine().ToString();
-                } while (metalList.CheckMetal(newMetal.ToLower()) == false);
-               
-                do
-                {
-                    try
-                    {
-                        Console.WriteLine("\nWhat is the weight? (grams)");
-                        weight = Convert.ToDouble(Console.ReadLine());
-                    }
-                    catch
-                    {
-                        Console.WriteLine("Error. Must be a number.");
-                    }                   
-                } while (weight <= 0.0);
+                double weight = calculations.MetalConverter();
+                History history = new History("Metal Conversion", weight);
+                calculations.AddToCalculationHisory(history);
 
-                weight = dummyMetal.ConvertMetal(metalList.GetMetal(oldMetal.ToLower()), metalList.GetMetal(newMetal.ToLower()), weight);
                 Console.WriteLine("\nNew metal weight is: {0}g", weight);
-
                 Console.WriteLine("\nPress any key to continue.");
                 Console.ReadKey();
             }
@@ -154,7 +164,9 @@ namespace JewelleryProgramV2
                         case SettingsMenu.Add: ringSizeList.AddRingSize(); break;
                         case SettingsMenu.Remove: ringSizeList.RemoveRingSize(); break;
                         case SettingsMenu.Modify: ringSizeList.ModifyRingSize(); break;
+                        case SettingsMenu.ResetDefault: ringSizeList.ResetDefaultValues(); break;
                         case SettingsMenu.Back: break;
+
                     }
                     Console.WriteLine();
                 } while (option != SettingsMenu.Back);
@@ -177,6 +189,7 @@ namespace JewelleryProgramV2
                         case SettingsMenu.Add: metalList.AddMetal(); break;
                         case SettingsMenu.Remove: metalList.RemoveMetal(); break;
                         case SettingsMenu.Modify: metalList.ModifyMetal(); break;
+                        case SettingsMenu.ResetDefault: metalList.ResetDefaultValues(); break;
                         case SettingsMenu.Back: break;
                     }
                     Console.WriteLine();
@@ -194,7 +207,10 @@ namespace JewelleryProgramV2
 
                 switch (option)
                 {
-                    case MenuOption.MetalConverter: MetalConverter(metalList); break;
+                    case MenuOption.MetalConverter: DoMetalConversion(calculations); break;
+                    case MenuOption.RingWeight: DoRingWeight(calculations); break;
+                    case MenuOption.RingResizer: DoRingResizer(calculations); break;
+                    case MenuOption.PrintHistory: calculations.PrintCalculationHistory(); break;
                     case MenuOption.MetalSettings: MetalSettingsMenu(metalList); break;
                     case MenuOption.RingSizeSettings: RingSizeSettingsMenu(ringSizeList); break;
                     case MenuOption.Quit: break;

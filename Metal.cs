@@ -37,12 +37,5 @@ namespace JewelleryProgramV2
         {
             this.SpecificGravity = specificGravity;
         }
-
-        public double ConvertMetal(Metal oldMetal, Metal newMetal, double weight)
-        {
-            double result = weight * (1.0 / oldMetal.SpecificGravity);
-            result *= newMetal.SpecificGravity;
-            return result;            
-        }
     }
 }

@@ -18,6 +18,11 @@ namespace JewelleryProgramV2
         }
 
         // Methods
+        public List<RingSize> GetRingSizeList()
+        {
+            return this.List;
+        }
+
         // Adds all default ring sizes
         public void AddDefaultSizes()
         {
@@ -130,13 +135,11 @@ namespace JewelleryProgramV2
         // Prints out ring sizes
         public void PrintRingSizes()
         {
-            Console.WriteLine("-- Ring Size List --");
             int i = 0;
-
             foreach (RingSize ringSize in this.List)
             {
                 Console.Write("AUS: {0}", ringSize.GetLetter());
-                Console.SetCursorPosition(12, (i + 2));
+                Console.SetCursorPosition(12, (i + 1));
                 Console.WriteLine("USA: {0}", ringSize.GetNumber());
                 i++;
             }
@@ -173,9 +176,18 @@ namespace JewelleryProgramV2
             string letter;
             double number = 0.0;
             double diameter = 0.0;
+            int index = 0;
 
-            Console.WriteLine("\nWhat is the letter size of the new ring size?");
-            letter = Console.ReadLine().ToUpper();
+            do
+            {
+                Console.WriteLine("\nWhat is the letter size of the new ring size?");
+                letter = Console.ReadLine().ToUpper();
+                if (CheckLetter(letter)) index = 1;
+                if (IsDouble(letter))
+                {
+                    if (CheckNumber(Convert.ToDouble(letter))) index = 1;
+                }
+            } while (index == 0);
 
             do
             {
@@ -215,11 +227,19 @@ namespace JewelleryProgramV2
             Console.WriteLine("-- Remove Ring Size --");
             PrintRingSizes();
             string answer;
+            int index = 0;
 
-
-            Console.WriteLine("\nWhat is the letter or number of the ring size to remove?");
-            answer = Console.ReadLine().ToUpper();
-
+            do
+            {
+                Console.WriteLine("\nWhat is the letter or number of the ring size to remove?");
+                answer = Console.ReadLine().ToUpper();
+                if (CheckLetter(answer)) index = 1;
+                if (IsDouble(answer))
+                {
+                    if (CheckNumber(Convert.ToDouble(answer))) index = 1;
+                }
+            } while (index == 0);
+            
             for (int i = 0; i < this.List.Count; i++)
             {
                 if (this.List[i].GetLetter() == answer)
@@ -245,7 +265,6 @@ namespace JewelleryProgramV2
             Console.Clear();
             Console.WriteLine("-- Modify Ring Size --");
             PrintRingSizes();
-            bool success = false;
             int index = 0;
             string answer;
             double answerDouble = 0.0;
@@ -253,8 +272,17 @@ namespace JewelleryProgramV2
             double number = 0.0;
             double diameter = 0.0;
 
-            Console.WriteLine("\nWhat is the letter or number of the ring size to modify?");
-            answer = Console.ReadLine().ToUpper();
+            do
+            {
+                Console.WriteLine("\nWhat is the letter or number of the ring size to remove?");
+                answer = Console.ReadLine().ToUpper();
+                if (CheckLetter(answer)) index = 1;
+                if (IsDouble(answer))
+                {
+                    if (CheckNumber(Convert.ToDouble(answer))) index = 1;
+                }
+            } while (index == 0);
+            index = 0;
 
             for (int i = 0; i < this.List.Count; i++)
             {
@@ -263,7 +291,6 @@ namespace JewelleryProgramV2
                     letter = this.List[i].GetLetter();
                     number = this.List[i].GetNumber();
                     diameter = this.List[i].GetDiameter();
-                    success = true;
                 }
                 if (IsDouble(answer))
                 {
@@ -272,92 +299,102 @@ namespace JewelleryProgramV2
                         letter = this.List[i].GetLetter();
                         number = this.List[i].GetNumber();
                         diameter = this.List[i].GetDiameter();
-                        success = true;
                     }
                 }
             }
 
-            if (success == true)
+            do
+            {
+                Console.WriteLine("\nDo you want to modify the letter, number or diameter?");
+                answer = Console.ReadLine().ToLower();
+                if (answer == "letter") index = 1;
+                if (answer == "number") index = 1;
+                if (answer == "diameter") index = 1;
+            } while (index == 0);
+
+            if (answer == "letter")
+            {
+                Console.WriteLine("\nWhat is the new letter?");
+                answer = Console.ReadLine().ToLower();
+
+                for (int i = 0; i < this.List.Count; i++)
+                {
+                    if (this.List[i].GetLetter() == letter)
+                    {
+                        this.List[i].SetLetter(answer);
+                        break;
+                    }
+                }
+            }
+            if (answer == "number")
             {
                 do
                 {
-                    Console.WriteLine("\nDo you want to modify the letter, number or diameter?");
-                    answer = Console.ReadLine().ToLower();
-                    if (answer == "letter") index = 1;
-                    if (answer == "number") index = 1;
-                    if (answer == "diameter") index = 1;
-                } while (index == 0);
-
-                if (answer == "letter")
-                {
-                    Console.WriteLine("\nWhat is the new letter?");
-                    answer = Console.ReadLine().ToLower();
-
-                    for (int i = 0; i < this.List.Count; i++)
+                    try
                     {
-                        if (this.List[i].GetLetter() == letter)
-                        {
-                            this.List[i].SetLetter(answer);
-                            break;
-                        }
+                        Console.WriteLine("\nWhat is the new number?");
+                        answerDouble = Convert.ToDouble(Console.ReadLine());
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Error. Must be a number.");
+                    }
+                } while (answerDouble <= 0.0);
+
+                for (int i = 0; i < this.List.Count; i++)
+                {
+                    if (this.List[i].GetNumber() == number)
+                    {
+                        this.List[i].SetNumber(answerDouble);
+                        break;
                     }
                 }
-                if (answer == "number")
+            }
+            if (answer == "diameter")
+            {
+                do
                 {
-                    do
+                    try
                     {
-                        try
-                        {
-                            Console.WriteLine("\nWhat is the new number?");
-                            answerDouble = Convert.ToDouble(Console.ReadLine());
-                        }
-                        catch
-                        {
-                            Console.WriteLine("Error. Must be a number.");
-                        }
-                    } while (answerDouble <= 0.0);
-
-                    for (int i = 0; i < this.List.Count; i++)
-                    {
-                        if (this.List[i].GetNumber() == number)
-                        {
-                            this.List[i].SetNumber(answerDouble);
-                            break;
-                        }
+                        Console.WriteLine("\nWhat is the new diameter?");
+                        answerDouble = Convert.ToDouble(Console.ReadLine());
                     }
-                }
-                if (answer == "diameter")
+                    catch
+                    {
+                        Console.WriteLine("Error. Must be a number.");
+                    }
+                } while (answerDouble <= 0.0);
+
+                for (int i = 0; i < this.List.Count; i++)
                 {
-                    do
+                    if (this.List[i].GetDiameter() == diameter)
                     {
-                        try
-                        {
-                            Console.WriteLine("\nWhat is the new diameter?");
-                            answerDouble = Convert.ToDouble(Console.ReadLine());
-                        }
-                        catch
-                        {
-                            Console.WriteLine("Error. Must be a number.");
-                        }
-                    } while (answerDouble <= 0.0);
-
-                    for (int i = 0; i < this.List.Count; i++)
-                    {
-                        if (this.List[i].GetDiameter() == diameter)
-                        {
-                            this.List[i].SetDiameter(answerDouble);
-                            break;
-                        }
+                        this.List[i].SetDiameter(answerDouble);
+                        break;
                     }
-                }
+                }    
             }                  
             return List;       
         }
 
+        // Resets all ring sizes to default
+        public void ResetDefaultValues()
+        {            
+            Console.WriteLine("Would you like to reset ring sizes to default? Y/N");
+            string answer = Console.ReadLine().ToLower();
+            
+            if (answer == "y")
+            {
+                List<RingSize> ringSizeList = new List<RingSize>();
+                List = ringSizeList;
+                AddDefaultSizes();
+            }
+        }
+
+        // Returns true if input is double
         private bool IsDouble(string input)
         {
-            double output;
-            bool isDouble = Double.TryParse(input, out output);
+            bool isDouble = Double.TryParse(input, out double output);
             if (isDouble)
             {
                 return true;
