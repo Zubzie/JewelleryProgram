@@ -4,7 +4,7 @@ using System.Text;
 
 namespace JewelleryProgramV2
 {
-    class RingSizeList
+    class RingSizeList : GeneralMethods
     {
         // Instance Variables
         private List<RingSize> List;
@@ -152,8 +152,8 @@ namespace JewelleryProgramV2
             Console.Write("-- Ring Size List --");
             Console.SetCursorPosition(30, 0);
             Console.WriteLine("-- Diameter --");
-            int i = 0;
 
+            int i = 0;
             foreach (RingSize ringSize in this.List)
             {
                 Console.Write("AUS: {0}", ringSize.GetLetter());
@@ -173,47 +173,12 @@ namespace JewelleryProgramV2
         {
             Console.Clear();
             Console.WriteLine("-- Add Ring Size --");
-            string letter;
-            double number = 0.0;
-            double diameter = 0.0;
-            int index = 0;
 
-            do
-            {
-                Console.WriteLine("\nWhat is the letter size of the new ring size?");
-                letter = Console.ReadLine().ToUpper();
-                if (CheckLetter(letter)) index = 1;
-                if (IsDouble(letter))
-                {
-                    if (CheckNumber(Convert.ToDouble(letter))) index = 1;
-                }
-            } while (index == 0);
+            Console.WriteLine("\nWhat is the letter of the new ring size?");
+            string letter = Console.ReadLine().ToUpper();
 
-            do
-            {
-                try
-                {
-                    Console.WriteLine("\nWhat is the number size of the new ring size?");
-                    number = Convert.ToDouble(Console.ReadLine());
-                }
-                catch
-                {
-                    Console.WriteLine("Error. Must be a number.");
-                }
-            } while (number <= 0.0);
-
-            do
-            {
-                try
-                {
-                    Console.WriteLine("\nWhat is the diameter of the new ring size?");
-                    diameter = Convert.ToDouble(Console.ReadLine());
-                }
-                catch
-                {
-                    Console.WriteLine("Error. Must be a number.");
-                }
-            } while (diameter <= 0.0);
+            double number = GetDouble("number size of the new ring size", "number");
+            double diameter = GetDouble("diameter of the new ring size", "milimeters");
 
             RingSize newRingSize = new RingSize(letter, number, diameter);
             this.List.Add(newRingSize);
@@ -223,11 +188,12 @@ namespace JewelleryProgramV2
         // Remove a ring size
         public List<RingSize> RemoveRingSize()
         {
-            Console.Clear();
-            Console.WriteLine("-- Remove Ring Size --");
-            PrintRingSizes();
             string answer;
             int index = 0;
+
+            Console.Clear();
+            Console.WriteLine("-- Remove Ring Size --");
+            PrintRingSizes();          
 
             do
             {
@@ -262,15 +228,15 @@ namespace JewelleryProgramV2
         // Modify a ring size
         public List<RingSize> ModifyRingSize()
         {
-            Console.Clear();
-            Console.WriteLine("-- Modify Ring Size --");
-            PrintRingSizes();
             int index = 0;
             string answer;
-            double answerDouble = 0.0;
             string letter = "";
             double number = 0.0;
             double diameter = 0.0;
+
+            Console.Clear();
+            Console.WriteLine("-- Modify Ring Size --");
+            PrintRingSizes();        
 
             do
             {
@@ -315,7 +281,7 @@ namespace JewelleryProgramV2
             if (answer == "letter")
             {
                 Console.WriteLine("\nWhat is the new letter?");
-                answer = Console.ReadLine().ToLower();
+                answer = Console.ReadLine().ToUpper();
 
                 for (int i = 0; i < this.List.Count; i++)
                 {
@@ -328,18 +294,7 @@ namespace JewelleryProgramV2
             }
             if (answer == "number")
             {
-                do
-                {
-                    try
-                    {
-                        Console.WriteLine("\nWhat is the new number?");
-                        answerDouble = Convert.ToDouble(Console.ReadLine());
-                    }
-                    catch
-                    {
-                        Console.WriteLine("Error. Must be a number.");
-                    }
-                } while (answerDouble <= 0.0);
+                double answerDouble = GetDouble("new number", "number");
 
                 for (int i = 0; i < this.List.Count; i++)
                 {
@@ -352,18 +307,7 @@ namespace JewelleryProgramV2
             }
             if (answer == "diameter")
             {
-                do
-                {
-                    try
-                    {
-                        Console.WriteLine("\nWhat is the new diameter?");
-                        answerDouble = Convert.ToDouble(Console.ReadLine());
-                    }
-                    catch
-                    {
-                        Console.WriteLine("Error. Must be a number.");
-                    }
-                } while (answerDouble <= 0.0);
+                double answerDouble = GetDouble("new diameter", "milimeters");
 
                 for (int i = 0; i < this.List.Count; i++)
                 {
@@ -380,7 +324,7 @@ namespace JewelleryProgramV2
         // Resets all ring sizes to default
         public void ResetDefaultValues()
         {            
-            Console.WriteLine("Would you like to reset ring sizes to default? Y/N");
+            Console.WriteLine("\nWould you like to reset ring sizes to default? Y/N");
             string answer = Console.ReadLine().ToLower();
             
             if (answer == "y")
@@ -389,17 +333,6 @@ namespace JewelleryProgramV2
                 List = ringSizeList;
                 AddDefaultSizes();
             }
-        }
-
-        // Returns true if input is double
-        private bool IsDouble(string input)
-        {
-            bool isDouble = Double.TryParse(input, out double output);
-            if (isDouble)
-            {
-                return true;
-            }
-            return false;
         }
     }
 }

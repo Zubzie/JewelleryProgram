@@ -10,10 +10,11 @@ namespace JewelleryProgramV2
             MetalConverter = 1,
             RingWeight = 2,
             RingResizer = 3,
-            PrintHistory = 4,
-            MetalSettings = 5,
-            RingSizeSettings = 6,
-            Quit = 7
+            RollingWire = 4,
+            PrintHistory = 5,
+            MetalSettings = 6,
+            RingSizeSettings = 7,
+            Quit = 8
         };
 
         enum SettingsMenu
@@ -84,6 +85,7 @@ namespace JewelleryProgramV2
                 Console.WriteLine("{0}. Metal Calculator", Convert.ToInt32(MenuOption.MetalConverter));
                 Console.WriteLine("{0}. Calculate Ring Weight", Convert.ToInt32(MenuOption.RingWeight));
                 Console.WriteLine("{0}. Ring Resizer", Convert.ToInt32(MenuOption.RingResizer));
+                Console.WriteLine("{0}. Rolling Wire Calculator", Convert.ToInt32(MenuOption.RollingWire));
                 Console.WriteLine("{0}. Print Calculation History", Convert.ToInt32(MenuOption.PrintHistory));
                 Console.WriteLine("{0}. Metal Settings", Convert.ToInt32(MenuOption.MetalSettings));
                 Console.WriteLine("{0}. Ring Size Settings", Convert.ToInt32(MenuOption.RingSizeSettings));
@@ -103,19 +105,34 @@ namespace JewelleryProgramV2
             }
 
             // Executes Ring Resizer
+            static void DoRollingWire(Calculations calculations)
+            {
+                Console.Clear();
+                Console.WriteLine("-- Rolling Wire Calculator --");
+
+                (double width, double length, double stockSize) = calculations.RollingWireCalculator();
+                Console.WriteLine("\nThe wire required is {0} in width and {1} in length.", Math.Round(width, 3), Math.Round(length, 3));
+                if (stockSize > 0.0)
+                {
+                    Console.WriteLine("The length of stock required is {0}.", Math.Round(stockSize, 3));
+                }
+                Console.WriteLine("\nPress any key to continue.");
+                Console.ReadKey();
+            }
+
+            // Executes Ring Resizer
             static void DoRingResizer(Calculations calculations)
             {
                 Console.Clear();
                 Console.WriteLine("-- Ring Resizer --");
 
                 double weight = calculations.RingResizer();
-                History history = new History("Ring Resize", weight);
+                History history = new History("Ring Resize", Math.Round(weight, 3));
                 calculations.AddToCalculationHisory(history);
 
-                Console.WriteLine("\nDifference between rings is: {0}g", weight);
+                Console.WriteLine("\nDifference between rings is: {0}g", Math.Round(weight, 3));
                 Console.WriteLine("\nPress any key to continue.");
-                Console.ReadKey();
-                
+                Console.ReadKey();           
             }
 
             // Executes and calculates ring weight
@@ -124,11 +141,11 @@ namespace JewelleryProgramV2
                 Console.Clear();
                 Console.WriteLine("-- Calculate Ring Weight --");
 
-                (double weight, double width, double thickness, double metalSG) = calculations.RingWeight();
-                History history = new History("Ring Weight", weight);
+                (double weight, double width, double thickness, double metalSG, string shape) = calculations.RingWeight();
+                History history = new History("Ring Weight", Math.Round(weight, 3));
                 calculations.AddToCalculationHisory(history);
 
-                Console.WriteLine("\nThe weight of the ring is: {0}g", weight);
+                Console.WriteLine("\nThe weight of the ring is: {0}g", Math.Round(weight, 3));
                 Console.WriteLine("\nPress any key to continue.");
                 Console.ReadKey();
             }
@@ -139,10 +156,10 @@ namespace JewelleryProgramV2
                 Console.WriteLine("-- Metal Converter --");
 
                 double weight = calculations.MetalConverter();
-                History history = new History("Metal Conversion", weight);
+                History history = new History("Metal Conversion", Math.Round(weight, 3));
                 calculations.AddToCalculationHisory(history);
 
-                Console.WriteLine("\nNew metal weight is: {0}g", weight);
+                Console.WriteLine("\nNew metal weight is: {0}g", Math.Round(weight, 3));
                 Console.WriteLine("\nPress any key to continue.");
                 Console.ReadKey();
             }
@@ -210,6 +227,7 @@ namespace JewelleryProgramV2
                     case MenuOption.MetalConverter: DoMetalConversion(calculations); break;
                     case MenuOption.RingWeight: DoRingWeight(calculations); break;
                     case MenuOption.RingResizer: DoRingResizer(calculations); break;
+                    case MenuOption.RollingWire: DoRollingWire(calculations); break;
                     case MenuOption.PrintHistory: calculations.PrintCalculationHistory(); break;
                     case MenuOption.MetalSettings: MetalSettingsMenu(metalList); break;
                     case MenuOption.RingSizeSettings: RingSizeSettingsMenu(ringSizeList); break;

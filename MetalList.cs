@@ -4,7 +4,7 @@ using System.Text;
 
 namespace JewelleryProgramV2
 {
-    class MetalList
+    class MetalList : GeneralMethods
     {
         // Instance Variables
         private List<Metal> List;
@@ -100,6 +100,7 @@ namespace JewelleryProgramV2
             Console.Write("-- Metal List --");
             Console.SetCursorPosition(30, 0);
             Console.WriteLine("-- Specific Gravity --");
+
             for (int i = 0; i < this.List.Count; i++)
             {
                 Console.Write("{0}. {1}", (i + 1), this.List[i].GetName());
@@ -116,23 +117,12 @@ namespace JewelleryProgramV2
         {
             Console.Clear();
             Console.WriteLine("-- Add Metal --");
+
             Console.WriteLine("\nWhat is the name of the new metal?");
             string metal = Console.ReadLine();
             metal = char.ToUpper(metal[0]) + metal[1..];
-            double sg = 0.0;
 
-            do
-            {
-                try
-                {
-                    Console.WriteLine("\nWhat is the specific gravity of the new metal?");
-                    sg = Convert.ToDouble(Console.ReadLine());
-                }
-                catch
-                {
-                    Console.WriteLine("Error. Must be a number.");
-                }
-            } while (sg <= 0.0);
+            double sg = GetDouble("specific gravity of the new metal", "number");
 
             Metal newMetal = new Metal(metal, sg);
             this.List.Add(newMetal);
@@ -142,10 +132,12 @@ namespace JewelleryProgramV2
         // Remove a metal
         public List<Metal> RemoveMetal()
         {
+            string metal;
+
             Console.Clear();
             Console.WriteLine("-- Remove Metal --");
             PrintMetals();
-            string metal;
+            
             do
             {
                 Console.WriteLine("\nWhat is the name of the metal to remove?");
@@ -166,12 +158,13 @@ namespace JewelleryProgramV2
         // Modify a metal
         public List<Metal> ModifyMetal()
         {
-            Console.Clear();
-            Console.WriteLine("-- Modify Metal --");
-            PrintMetals();
             string metal, answer;
             double sg = 0.0;
             int index = 0;
+
+            Console.Clear();
+            Console.WriteLine("-- Modify Metal --");
+            PrintMetals();           
 
             do
             {
@@ -181,7 +174,7 @@ namespace JewelleryProgramV2
             
             do
             {
-                Console.WriteLine("\nWould you like to change the name or specific gravity(SG)?");
+                Console.WriteLine("\nWould you like to change the name or specific gravity?");
                 answer = Console.ReadLine().ToLower();
                 if (answer == "name") index = 1;               
                 if (answer == "specific gravity") index = 1;
@@ -206,18 +199,7 @@ namespace JewelleryProgramV2
             }
             else
             {
-                do
-                {
-                    try
-                    {
-                        Console.WriteLine("\nWhat is the new specific gravity of the metal?");
-                        sg = Convert.ToDouble(Console.ReadLine());
-                    }
-                    catch
-                    {
-                        Console.WriteLine("Error. Must be a number.");
-                    }
-                } while (sg <= 0.0);
+                sg = GetDouble("specific gravity of the new metal", "number");
 
                 for (int i = 0; i < this.List.Count; i++)
                 {
@@ -234,7 +216,7 @@ namespace JewelleryProgramV2
         // Restores all metals to default values
         public void ResetDefaultValues()
         {
-            Console.WriteLine("Would you like to reset metals to default? Y/N");
+            Console.WriteLine("\nWould you like to reset metals to default? Y/N");
             string answer = Console.ReadLine().ToLower();
 
             if (answer == "y")
