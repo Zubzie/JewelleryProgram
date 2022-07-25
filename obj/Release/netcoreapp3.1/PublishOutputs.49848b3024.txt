@@ -1,0 +1,5 @@
+C:\Users\jake_\Desktop\JewelleryProgramV2.exe
+C:\Users\jake_\Desktop\JewelleryProgramV2.dll
+C:\Users\jake_\Desktop\JewelleryProgramV2.deps.json
+C:\Users\jake_\Desktop\JewelleryProgramV2.runtimeconfig.json
+C:\Users\jake_\Desktop\JewelleryProgramV2.pdb

@@ -9,7 +9,7 @@ namespace JewelleryProgramV2
         // Instance Variables
         private MetalList Metals;
         private RingSizeList RingSizes;
-        private List<History> CalculationHistory;       
+        private readonly List<History> CalculationHistory;       
 
         // Constructor
         public Calculations(MetalList metals, RingSizeList ringSizes)

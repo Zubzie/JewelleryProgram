@@ -7,8 +7,8 @@ namespace JewelleryProgramV2
     class History
     {
         // Instance Variables
-        private string Identifier;
-        private double Output;
+        private readonly string Identifier;
+        private readonly double Output;
 
         // Constructor
         public History(string identifier, double output)
